@@ -13,5 +13,8 @@ UCLASS()
 class LEAVEME_API ALMAPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+public:
+	ALMAPlayerController();
+protected:
+	void BeginPlay() override;
 };
