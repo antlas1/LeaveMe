@@ -3,16 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
-#include "LMAGameMode.generated.h"
+#include "GameFramework/PlayerController.h"
+#include "LMAPlayerController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class LEAVEME_API ALMAGameMode : public AGameModeBase
+class LEAVEME_API ALMAPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-public:
-	ALMAGameMode();
+	
 };
