@@ -28,6 +28,15 @@ protected:
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	UPROPERTY()
+	UDecalComponent* CurrentCursor = nullptr;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cursor")
+	UMaterialInterface* CursorMaterial = nullptr;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cursor")
+	FVector CursorSize = FVector(20.0f, 40.0f, 40.0f);
 
 public:	
 	// Called every frame

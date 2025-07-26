@@ -4,6 +4,8 @@
 #include "LMADefaultCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/DecalComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ALMADefaultCharacter::ALMADefaultCharacter()
@@ -23,6 +25,10 @@ ALMADefaultCharacter::ALMADefaultCharacter()
 	CameraComponent->SetFieldOfView(FOV);
 	CameraComponent->bUsePawnControlRotation = false; //запрещаем камере вращаться относительно SpringArmComponent.
 	
+	//запретим нашему персонажу поворачиваться в сторону камеры. 
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
@@ -31,6 +37,11 @@ ALMADefaultCharacter::ALMADefaultCharacter()
 void ALMADefaultCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	//Мы проверяем задан ли материал для нашего курсора и если он задан
+	if (CursorMaterial)
+	{
+		CurrentCursor = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), CursorMaterial, CursorSize, FVector(0));
+	}
 	
 }
 
