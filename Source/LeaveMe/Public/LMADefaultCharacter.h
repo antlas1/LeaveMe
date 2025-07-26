@@ -48,8 +48,13 @@ public:
 private:
     float YRotation = -75.0f;
 	float ArmLength = 1400.0f;
+	//Минимальное и максимальное значение дины рычага
+	float MinArmLength = 300.0f;
+	float MaxArmLength = 2000.0f;
 	float FOV = 55.0f;
 	
 	void MoveForward(float Value);
 	void MoveRight(float Value);
+	//отработка колеса для камеры
+	void ZoomCamera(float Value);
 };

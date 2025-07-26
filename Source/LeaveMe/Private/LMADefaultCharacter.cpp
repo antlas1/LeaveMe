@@ -85,6 +85,7 @@ void ALMADefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	//Привязка для управления осей
 	PlayerInputComponent->BindAxis("MoveForward", this, &ALMADefaultCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ALMADefaultCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("ZoomCamera", this, &ALMADefaultCharacter::ZoomCamera);
 }
 
 void ALMADefaultCharacter::MoveForward(float Value)
@@ -98,3 +99,8 @@ void ALMADefaultCharacter::MoveRight(float Value)
 } 
 
 
+void ALMADefaultCharacter::ZoomCamera(float Value)
+{
+   ArmLength = FMath::Clamp(ArmLength + Value * 100.0f, MinArmLength, MaxArmLength);
+   SpringArmComponent->TargetArmLength = ArmLength;
+}
