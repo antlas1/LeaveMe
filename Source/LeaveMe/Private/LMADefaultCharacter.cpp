@@ -2,13 +2,21 @@
 
 
 #include "LMADefaultCharacter.h"
+#include "Camera/CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
 ALMADefaultCharacter::ALMADefaultCharacter()
 {
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArm"); //создаем компопнет через систему UE с автосборкой мусора
+	SpringArmComponent->SetupAttachment(GetRootComponent()); //устанавливаем рута
+	
+
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent"); //создаем компопнет через систему UE с автосборкой мусора
+	CameraComponent->SetupAttachment(SpringArmComponent); //устанавливаем рута
+	
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned

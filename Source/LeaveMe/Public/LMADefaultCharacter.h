@@ -6,6 +6,10 @@
 #include "GameFramework/Character.h"
 #include "LMADefaultCharacter.generated.h"
 
+//Потом сделаем инклуд
+class UCameraComponent;
+class USpringArmComponent;
+
 UCLASS()
 class LEAVEME_API ALMADefaultCharacter : public ACharacter
 {
@@ -16,6 +20,13 @@ public:
 	ALMADefaultCharacter();
 
 protected:
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	USpringArmComponent* SpringArmComponent; //рычаг камеры
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UCameraComponent* CameraComponent; //камера (FOV)
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
