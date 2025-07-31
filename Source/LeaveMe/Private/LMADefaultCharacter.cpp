@@ -8,6 +8,7 @@
 #include "Components/DecalComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Components/LMAHealthComponent.h"
 
 // Sets default values
 ALMADefaultCharacter::ALMADefaultCharacter()
@@ -33,6 +34,8 @@ ALMADefaultCharacter::ALMADefaultCharacter()
 	bUseControllerRotationRoll = false;
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
+	HealthComponent = CreateDefaultSubobject<ULMAHealthComponent>("HealthComponent");
 }
 
 // Called when the game starts or when spawned
@@ -44,14 +47,18 @@ void ALMADefaultCharacter::BeginPlay()
 	{
 		CurrentCursor = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), CursorMaterial, CursorSize, FVector(0));
 	}
-	
+	OnHealthChanged(HealthComponent->GetHealth());
+	HealthComponent->OnDeath.AddUObject(this, &ALMADefaultCharacter::OnDeath);
+	HealthComponent->OnHealthChanged.AddUObject(this, &ALMADefaultCharacter::OnHealthChanged);
 }
 
 // Called every frame
 void ALMADefaultCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//получаем локальный указатель на контроллер нашего персонажа
+	if (!(HealthComponent->IsDead()))
+	{
+		//получаем локальный указатель на контроллер нашего персонажа
 APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (PC)
 	{
@@ -75,6 +82,8 @@ e=True,bStaticObject=False,Name="Land")
 			CurrentCursor->SetWorldLocation(ResultHit.Location);
 		}
 	}
+	}
+	
 }
 
 // Called to bind functionality to input
@@ -103,4 +112,25 @@ void ALMADefaultCharacter::ZoomCamera(float Value)
 {
    ArmLength = FMath::Clamp(ArmLength + Value * 100.0f, MinArmLength, MaxArmLength);
    SpringArmComponent->TargetArmLength = ArmLength;
+}
+
+void ALMADefaultCharacter::OnDeath()
+{
+	CurrentCursor->DestroyRenderState_Concurrent();
+
+	//PlayAnimMontage(DeathMontage);
+
+	//GetCharacterMovement()->DisableMovement();
+
+	SetLifeSpan(5.0f);
+
+	if (Controller)
+	{
+		Controller->ChangeState(NAME_Spectating);
+	}
+}
+
+void ALMADefaultCharacter::OnHealthChanged(float NewHealth)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Health = %f"), NewHealth));
 }

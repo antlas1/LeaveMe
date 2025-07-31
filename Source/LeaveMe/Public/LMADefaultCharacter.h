@@ -18,6 +18,9 @@ class LEAVEME_API ALMADefaultCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ALMADefaultCharacter();
+	
+	UFUNCTION()
+	ULMAHealthComponent* GetHealthComponent() const { return HealthComponent; }  
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -25,6 +28,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UCameraComponent* CameraComponent; //камера (FOV)
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components|Health")
+	ULMAHealthComponent* HealthComponent;
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -57,4 +63,7 @@ private:
 	void MoveRight(float Value);
 	//отработка колеса для камеры
 	void ZoomCamera(float Value);
+	
+	void OnDeath();
+	void OnHealthChanged(float NewHealth);
 };
