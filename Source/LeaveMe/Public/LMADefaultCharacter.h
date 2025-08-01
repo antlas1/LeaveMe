@@ -9,6 +9,8 @@
 //Потом сделаем инклуд
 class UCameraComponent;
 class USpringArmComponent;
+class ULMAHealthComponent;
+class UAnimMontage;
 
 UCLASS()
 class LEAVEME_API ALMADefaultCharacter : public ACharacter
@@ -31,6 +33,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components|Health")
 	ULMAHealthComponent* HealthComponent;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Animation")
+	UAnimMontage* DeathMontage;
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

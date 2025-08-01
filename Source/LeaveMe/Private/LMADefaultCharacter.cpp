@@ -9,6 +9,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/LMAHealthComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Engine/Engine.h"
 
 // Sets default values
 ALMADefaultCharacter::ALMADefaultCharacter()
@@ -118,9 +120,9 @@ void ALMADefaultCharacter::OnDeath()
 {
 	CurrentCursor->DestroyRenderState_Concurrent();
 
-	//PlayAnimMontage(DeathMontage);
+	PlayAnimMontage(DeathMontage);
 
-	//GetCharacterMovement()->DisableMovement();
+	GetCharacterMovement()->DisableMovement();
 
 	SetLifeSpan(5.0f);
 
