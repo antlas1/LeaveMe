@@ -60,32 +60,8 @@ void ALMADefaultCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (!(HealthComponent->IsDead()))
 	{
-		//получаем локальный указатель на контроллер нашего персонажа
-APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	if (PC)
-	{
-		//FHitResult - хранящая поля с информацией о столкновении с различными объектами, дастанцию, место начала/конца трейса
-		FHitResult ResultHit;
-		/*
-		Функция GetHitResultUnderCursor принимает несколько аргументов, первый – это канал
-		трассировки, ECC_GameTraceChannel1, это тот канал который мы с вами задали в Project Settings >
-		Engine > Collision. Чтобы проверить номер созданного канала, перейдите в директорию Config >
-		DefaultEngine.ini. Где в категории CollisionProfile у вас должна быть следующая запись	+DefaultChannelResponses=(Channel=ECC_GameTraceChannel1,DefaultResponse=ECR_Block,bTraceTyp
-e=True,bStaticObject=False,Name="Land")
-		*/
-		PC->GetHitResultUnderCursor(ECC_GameTraceChannel1, true, ResultHit);
-		//передаем результат соотношения местоположения игрока и точки с которой у нас столкнулся курсор. 
-		float FindRotatorResultYaw = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), ResultHit.Location).Yaw;
-		//поворачиваем персонажа на наш курсор с помощью функции SetActorRotation
-		SetActorRotation(FQuat(FRotator(0.0f, FindRotatorResultYaw, 0.0f)));
-		//Последнее что нам осталось, это присоединить визуальную часть нашего курсора, относительно текущего положения.
-		if (CurrentCursor)
-		{
-			CurrentCursor->SetWorldLocation(ResultHit.Location);
-		}
+		RotationPlayerOnCursor();
 	}
-	}
-	
 }
 
 // Called to bind functionality to input
@@ -135,4 +111,32 @@ void ALMADefaultCharacter::OnDeath()
 void ALMADefaultCharacter::OnHealthChanged(float NewHealth)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Health = %f"), NewHealth));
+}
+
+void ALMADefaultCharacter::RotationPlayerOnCursor()
+{
+	//получаем локальный указатель на контроллер нашего персонажа
+APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (PC)
+	{
+		//FHitResult - хранящая поля с информацией о столкновении с различными объектами, дастанцию, место начала/конца трейса
+		FHitResult ResultHit;
+		/*
+		Функция GetHitResultUnderCursor принимает несколько аргументов, первый – это канал
+		трассировки, ECC_GameTraceChannel1, это тот канал который мы с вами задали в Project Settings >
+		Engine > Collision. Чтобы проверить номер созданного канала, перейдите в директорию Config >
+		DefaultEngine.ini. Где в категории CollisionProfile у вас должна быть следующая запись	+DefaultChannelResponses=(Channel=ECC_GameTraceChannel1,DefaultResponse=ECR_Block,bTraceTyp
+e=True,bStaticObject=False,Name="Land")
+		*/
+		PC->GetHitResultUnderCursor(ECC_GameTraceChannel1, true, ResultHit);
+		//передаем результат соотношения местоположения игрока и точки с которой у нас столкнулся курсор. 
+		float FindRotatorResultYaw = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), ResultHit.Location).Yaw;
+		//поворачиваем персонажа на наш курсор с помощью функции SetActorRotation
+		SetActorRotation(FQuat(FRotator(0.0f, FindRotatorResultYaw, 0.0f)));
+		//Последнее что нам осталось, это присоединить визуальную часть нашего курсора, относительно текущего положения.
+		if (CurrentCursor)
+		{
+			CurrentCursor->SetWorldLocation(ResultHit.Location);
+		}
+	}
 }
